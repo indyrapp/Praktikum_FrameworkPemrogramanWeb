@@ -12,8 +12,9 @@ class CategoryController extends Controller
      */
     public function index()
     {   
-        // Otomatis mengarahkan /categories langsung ke /categories/create
-        return redirect()->route('categories.create');
+        // Mengambil kategori terbaru dengan paginasi 10 item per halaman
+        $categories = Category::latest()->paginate(10);
+        return view('master-data.category.index', compact('categories'));
     }
 
     /**
@@ -21,6 +22,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        // Menampilkan form penambahan kategori
         return view('master-data.category.create');
     }
 
@@ -29,15 +31,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {   
+        // Validasi input form secara inline
         $validated = $request->validate([
             'name' => 'required|string|max:100|unique:categories,name',
             'description' => 'nullable|string|max:255',
         ]);
- 
+
+        // Menyimpan data yang sudah terverifikasi ke database
         Category::create($validated);
- 
-        // Setelah klik Simpan, kembali ke form create tanpa error
-        return redirect()->route('categories.create')->with('success', 'Kategori berhasil ditambahkan.');
+
+        // Mengarahkan kembali ke halaman index disertai flash session
+        return redirect()->route('categories.index')->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     /**

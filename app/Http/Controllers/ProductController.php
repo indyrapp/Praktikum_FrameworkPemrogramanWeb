@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Http\Requests\StoreProductRequest;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -13,9 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-            $products = Product::with('category')->latest()->paginate(10);
- 
-    return view('master-data.product.index', compact('products'));
+        $products = Product::with('category')->latest()->paginate(10);
+
+        return view('master-data.product.index', compact('products'));
     }
 
     /**
@@ -23,8 +24,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-            $categories = Category::orderBy('name')->get();
-    return view('master-data.product.create', compact('categories'));
+        $categories = Category::orderBy('name')->get();
+
+        return view('master-data.product.create', compact('categories'));
     }
 
     /**
@@ -32,15 +34,15 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-            Product::create($request->validated());
- 
-    return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
+        Product::create($request->validated());
+
+        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Product $product)
     {
         //
     }
@@ -48,7 +50,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(Product $product)
     {
         //
     }
@@ -56,7 +58,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, Product $product)
     {
         //
     }
@@ -64,7 +66,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Product $product)
     {
         //
     }
